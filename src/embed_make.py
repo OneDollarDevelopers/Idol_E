@@ -1,5 +1,5 @@
 from facenet_pytorch import MTCNN, InceptionResnetV1
-import cv2
+import torch
 import PIL
 import re
 import tqdm
@@ -26,7 +26,6 @@ def load_data():
 
 
 
-train_list, labels = load_data()
 
 #make embeddings list from train forder
 def make_embeddings_list():
@@ -40,23 +39,26 @@ def make_embeddings_list():
         if type(img_cropped) == type(None):
             del(labels[i])
             continue
-        img_embedding = resnet(img_cropped.unsqueeze(0))
+        with torch.no_grad():
+            img_embedding = resnet(img_cropped.unsqueeze(0))
         embeddings_list.append(img_embedding)
     return embeddings_list
 
-embeddings_list = make_embeddings_list()
 #embeddings_list to file
 def save_embeddings_list():
     import pickle
-    with open('./embeddings_list.pkl', 'wb') as f:
+    with open('./embeddings_list2.pkl', 'wb') as f:
         pickle.dump(embeddings_list, f)
 
 #labels to file
 def save_labels():
     import pickle
-    with open('./labels.pkl', 'wb') as f:
+    with open('./labels2.pkl', 'wb') as f:
         pickle.dump(labels, f)
 
+
+train_list, labels = load_data()
+embeddings_list = make_embeddings_list()
 save_embeddings_list()
 save_labels()
 
