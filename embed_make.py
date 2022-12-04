@@ -8,7 +8,7 @@ import gc
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = './train_less images/'
+train_path = './train/'
 #load image data from train folder with labels
 def load_data():
     import os
