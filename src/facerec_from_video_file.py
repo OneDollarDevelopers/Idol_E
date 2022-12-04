@@ -1,4 +1,4 @@
-import facenet_pytorch
+import face_recognition
 import cv2
 from moviepy.editor import *
 # This is a demo of running face recognition on a video file and saving the results to a new video file.

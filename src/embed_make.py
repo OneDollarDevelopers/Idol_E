@@ -3,11 +3,12 @@ import cv2
 import PIL
 import re
 import tqdm
+import gc
 
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = 'train_less images/'
+train_path = './train/'
 #load image data from train folder with labels
 def load_data():
     import os
@@ -33,51 +34,33 @@ def make_embeddings_list():
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
     embeddings_list = []
     for i in tqdm.tqdm(range(len(train_list))):
-        print(train_list[i])
         img = PIL.Image.open(train_list[i])
         img_cropped = mtcnn(img, save_path=None)
+        del(img)
+        if type(img_cropped) == type(None):
+            del(labels[i])
+            continue
         img_embedding = resnet(img_cropped.unsqueeze(0))
         embeddings_list.append(img_embedding)
     return embeddings_list
 
 embeddings_list = make_embeddings_list()
-
-#SVM classifier for embeddings
-def svm_classifier():
-    from sklearn.svm import SVC
-    clf = SVC(kernel='linear', probability=True)
-    clf.fit(embeddings_list, labels)
-    return clf
-
-clf = svm_classifier()
-
-#save model
-def save_model():
+#embeddings_list to file
+def save_embeddings_list():
     import pickle
-    with open('./model.pkl', 'wb') as f:
-        pickle.dump(clf, f)
+    with open('./embeddings_list.pkl', 'wb') as f:
+        pickle.dump(embeddings_list, f)
 
-save_model()
-
-#load model
-def load_model():
+#labels to file
+def save_labels():
     import pickle
-    with open('model.pkl', 'rb') as f:
-        clf = pickle.load(f)
-    return clf
+    with open('./labels.pkl', 'wb') as f:
+        pickle.dump(labels, f)
 
-#predict
-def predict():
-    mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
-    resnet = InceptionResnetV1(pretrained='vggface2').eval()
-    clf = load_model()
-    img = PIL.Image.open('test/1.jpg')
-    img_cropped = mtcnn(img, save_path=None)
-    img_embedding = resnet(img_cropped.unsqueeze(0))
-    print(clf.predict(img_embedding))
+save_embeddings_list()
+save_labels()
 
-predict()
-print('Done')
+
 
 
 
