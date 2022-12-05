@@ -4,8 +4,8 @@ from moviepy.editor import *
 
 import predict_module as M
 
-input_movie = cv2.VideoCapture("../test_video/example3.mp4")
-parent_clip = VideoFileClip('../test_video/example3.mp4', audio=True)
+input_movie = cv2.VideoCapture("../test_video/example4.mp4")
+parent_clip = VideoFileClip('../test_video/example4.mp4', audio=True)
 length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
 
 
@@ -62,7 +62,7 @@ while True:
 
 # All done!
 final_clip = concatenate_videoclips(videoclip)
-final_clip.write_videofile("../test_video/moviepy.mp4",  codec='libx264', 
+final_clip.write_videofile("../test_video/moviepy4.mp4",  codec='libx264', 
                      audio_codec='aac', 
                      temp_audiofile='temp-audio.m4a', 
                      remove_temp=True)
