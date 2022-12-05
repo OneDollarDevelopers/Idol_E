@@ -1,13 +1,14 @@
 from facenet_pytorch import MTCNN, InceptionResnetV1
-import cv2
+import torch
 import PIL
 import re
 import tqdm
+import gc
 
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = 'train_less images/'
+train_path = './train/'
 #load image data from train folder with labels
 def load_data():
     import os
@@ -25,7 +26,6 @@ def load_data():
 
 
 
-train_list, labels = load_data()
 
 #make embeddings list from train forder
 def make_embeddings_list():
@@ -33,51 +33,36 @@ def make_embeddings_list():
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
     embeddings_list = []
     for i in tqdm.tqdm(range(len(train_list))):
-        print(train_list[i])
         img = PIL.Image.open(train_list[i])
         img_cropped = mtcnn(img, save_path=None)
-        img_embedding = resnet(img_cropped.unsqueeze(0))
+        del(img)
+        if type(img_cropped) == type(None):
+            del(labels[i])
+            continue
+        with torch.no_grad():
+            img_embedding = resnet(img_cropped.unsqueeze(0))
         embeddings_list.append(img_embedding)
     return embeddings_list
 
+#embeddings_list to file
+def save_embeddings_list():
+    import pickle
+    with open('./embeddings_list2.pkl', 'wb') as f:
+        pickle.dump(embeddings_list, f)
+
+#labels to file
+def save_labels():
+    import pickle
+    with open('./labels2.pkl', 'wb') as f:
+        pickle.dump(labels, f)
+
+
+train_list, labels = load_data()
 embeddings_list = make_embeddings_list()
+save_embeddings_list()
+save_labels()
 
-#SVM classifier for embeddings
-def svm_classifier():
-    from sklearn.svm import SVC
-    clf = SVC(kernel='linear', probability=True)
-    clf.fit(embeddings_list, labels)
-    return clf
 
-clf = svm_classifier()
-
-#save model
-def save_model():
-    import pickle
-    with open('./model.pkl', 'wb') as f:
-        pickle.dump(clf, f)
-
-save_model()
-
-#load model
-def load_model():
-    import pickle
-    with open('model.pkl', 'rb') as f:
-        clf = pickle.load(f)
-    return clf
-
-#predict
-def predict():
-    mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
-    resnet = InceptionResnetV1(pretrained='vggface2').eval()
-    clf = load_model()
-    img = PIL.Image.open('test/1.jpg')
-    img_cropped = mtcnn(img, save_path=None)
-    img_embedding = resnet(img_cropped.unsqueeze(0))
-    print(clf.predict(img_embedding))
-
-predict()
-print('Done')
 
 
 
