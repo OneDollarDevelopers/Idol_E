@@ -25,9 +25,10 @@ def predict(image):
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
     clf = load_model()
     img_cropped = mtcnn(image, save_path=None)
-    print(type(img_cropped[0]))
+    if type(img_cropped) == type(None):
+        return None, None
     y_pred = []
-    print(str(len(img_cropped))+" faces found")
+    #print(str(len(img_cropped))+" faces found")
     for i in range(len(img_cropped)):
         #img = transform(img_cropped[i])
         #img.show()
