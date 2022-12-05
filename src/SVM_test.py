@@ -1,5 +1,3 @@
-
-
 #load model
 from facenet_pytorch import MTCNN, InceptionResnetV1
 import cv2
@@ -30,17 +28,19 @@ def predict_multiple():
         predict(i)
 
 def predict(path):
-    mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
+    mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20, keep_all=True) #keep_all=True
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
     clf = load_model()
     img = PIL.Image.open(path)
     img_cropped = mtcnn(img, save_path=None)
-    img_embedding = resnet(img_cropped.unsqueeze(0))
+    print(len(img_cropped))
+    img_embedding = resnet(img_cropped[1].unsqueeze(0))
     img_embedding = img_embedding.detach().numpy()
     print(path)
     print(clf.predict(img_embedding))
-    y_pred = clf.predict_proba(img_embedding)[:,1]
+    y_pred = np.amax(clf.predict_proba(img_embedding))
     print(y_pred)
 
-predict_multiple()
+#predict_multiple()
+predict('../test_embed/article.jpg')
 print('Done')
