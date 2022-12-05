@@ -5,8 +5,7 @@ from facenet_pytorch import MTCNN, InceptionResnetV1
 import cv2
 import PIL
 import re
-import tqdm
-
+import numpy as np
 #is_hidden function
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
@@ -24,9 +23,9 @@ def predict_multiple():
     from PIL import Image
     import numpy as np
     test_list = []
-    for i in os.listdir('test'):
+    for i in os.listdir('../test'):
         if not is_hidden(i):
-            test_list.append('test/'+i)
+            test_list.append('../test/'+i)
     for i in test_list:
         predict(i)
 
@@ -40,6 +39,8 @@ def predict(path):
     img_embedding = img_embedding.detach().numpy()
     print(path)
     print(clf.predict(img_embedding))
+    y_pred = clf.predict_proba(img_embedding)[:,1]
+    print(y_pred)
 
 predict_multiple()
 print('Done')
