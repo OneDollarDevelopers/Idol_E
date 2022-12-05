@@ -31,6 +31,8 @@ def predict(image):
     for i in range(len(img_cropped)):
         #img = transform(img_cropped[i])
         #img.show()
+        if type(img_cropped) == type(None):
+            continue
         img_embedding = resnet(img_cropped[i].unsqueeze(0))
         img_embedding = img_embedding.detach().numpy()
         print(np.amax(clf.predict_proba(img_embedding)))
