@@ -4,6 +4,8 @@ import cv2
 import PIL
 import re
 import numpy as np
+import torchvision.transforms as T
+import matplotlib.pyplot as plt
 #is_hidden function
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
@@ -27,24 +29,47 @@ def predict_multiple():
     for i in test_list:
         predict(i)
 
+def detect_face(path):
+    img = PIL.Image.open(path)
+    mtcnn = MTCNN(image_size=160, margin=20, min_face_size=20, keep_all=True) #keep_all=True
+    boxes, probs, landmarks = mtcnn.detect(img, landmarks=True)
+
+    # Visualize
+    fig, ax = plt.subplots(figsize=(16, 12))
+    ax.imshow(img)
+    ax.axis('off')
+    
+    for box, landmark in zip(boxes, landmarks):
+        ax.scatter(*np.meshgrid(box[[0, 2]], box[[1, 3]]))
+        ax.scatter(landmark[:, 0], landmark[:, 1], s=8)
+        fig.show()
+
 def predict(path):
-    mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20, keep_all=True) #keep_all=True
+    transform = T.ToPILImage()
+    mtcnn = MTCNN(image_size=160, margin=20, min_face_size=20, keep_all=True) #keep_all=True
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
     clf = load_model()
     img = PIL.Image.open(path)
     img_cropped = mtcnn(img, save_path=None)
+    print(type(img_cropped[0]))
     y_pred = []
     print(str(len(img_cropped))+" faces found")
     for i in range(len(img_cropped)):
+        #img = transform(img_cropped[i])
+        #img.show()
         img_embedding = resnet(img_cropped[i].unsqueeze(0))
         img_embedding = img_embedding.detach().numpy()
-        if (np.amax(clf.predict_proba(img_embedding)) > 0.3).astype(bool):
+        print(np.amax(clf.predict_proba(img_embedding)))
+        if (np.amax(clf.predict_proba(img_embedding)) > 0.8).astype(bool):
             y_pred.append(clf.predict(img_embedding))
+            print(y_pred[i])
         else:
             y_pred.append( 'unknown')
-    print(y_pred)
+    return y_pred
 
 
 #predict_multiple()
-predict('./test_embed/article.jpg')
+prediction = predict('./test_embed/article.jpg')
+detect_face('test_embed/article.jpg')
+#print(prediction)
 print('Done')
