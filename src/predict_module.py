@@ -13,21 +13,10 @@ def is_hidden(path):
 
 def load_model():
     import pickle
-    with open('./model.pkl', 'rb') as f:
+    with open('../model.pkl', 'rb') as f:
         clf = pickle.load(f)
     return clf
 
-#predict multiple images
-def predict_multiple():
-    import os
-    from PIL import Image
-    import numpy as np
-    test_list = []
-    for i in os.listdir('./test'):
-        if not is_hidden(i):
-            test_list.append('./test/'+i)
-    for i in test_list:
-        predict(i)
 
 
 def predict(image):
@@ -50,5 +39,5 @@ def predict(image):
             print(y_pred[i])
         else:
             y_pred.append( 'unknown')
-    return y_pred
+    return y_pred, img_embedding
 
