@@ -6,9 +6,9 @@ import torch
 #load pkls to numpy arrays
 def load_pkl():
     import pickle
-    with open('../embeddings_list.pkl', 'rb') as f:  
+    with open('./embeddings_list.pkl', 'rb') as f:  
         embeddings_list = pickle.load(f)
-    with open('../labels.pkl', 'rb') as f:
+    with open('./labels.pkl', 'rb') as f:
         labels = pickle.load(f)
     return embeddings_list, labels  
 

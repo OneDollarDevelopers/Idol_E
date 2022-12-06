@@ -47,13 +47,13 @@ def make_embeddings_list():
 #embeddings_list to file
 def save_embeddings_list():
     import pickle
-    with open('./embeddings_list2.pkl', 'wb') as f:
+    with open('./embeddings_list.pkl', 'wb') as f:
         pickle.dump(embeddings_list, f)
 
 #labels to file
 def save_labels():
     import pickle
-    with open('./labels2.pkl', 'wb') as f:
+    with open('./labels.pkl', 'wb') as f:
         pickle.dump(labels, f)
 
 
