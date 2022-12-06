@@ -8,7 +8,7 @@ import gc
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = './train/'
+train_path = '../train/'
 #load image data from train folder with labels
 def load_data():
     import os
@@ -57,10 +57,16 @@ def save_labels():
         pickle.dump(labels, f)
 
 
-train_list, labels = load_data()
-embeddings_list = make_embeddings_list()
-save_embeddings_list()
-save_labels()
+def main():
+    # python 3에서는 print() 으로 사용합니다.
+    train_list, labels = load_data()
+    embeddings_list = make_embeddings_list()
+    save_embeddings_list()
+    save_labels()
+
+if __name__ == "__main__":
+	main()
+
 
 
 
