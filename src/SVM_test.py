@@ -60,7 +60,7 @@ def predict(path):
         img_embedding = resnet(img_cropped[i].unsqueeze(0))
         img_embedding = img_embedding.detach().numpy()
         print(np.amax(clf.predict_proba(img_embedding)))
-        if (np.amax(clf.predict_proba(img_embedding)) > 0.8).astype(bool):
+        if (np.amax(clf.predict_proba(img_embedding)) > 0.7).astype(bool):
             y_pred.append(clf.predict(img_embedding))
             print(y_pred[i])
         else:
@@ -69,7 +69,7 @@ def predict(path):
 
 
 #predict_multiple()
-prediction = predict('./test_embed/article.jpg')
+prediction = predict('./test_embed/article4.jpeg')
 detect_face('test_embed/article.jpg')
 #print(prediction)
 print('Done')

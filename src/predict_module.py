@@ -42,5 +42,6 @@ def predict(image):
             print(y_pred[i])
         else:
             y_pred.append( 'unknown')
+            print(y_pred[i])
     return y_pred, img_embedding
 
