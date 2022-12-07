@@ -29,7 +29,7 @@ def load_data():
 def make_embeddings_list():
     mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
     resnet = InceptionResnetV1(classify = True, pretrained='vggface2',num_classes=25).eval()
-    resnet.load_state_dict(torch.load('./resnetmodel.pt', map_location=torch.device('cpu')))
+    resnet.load_state_dict(torch.load('../resnetmodel_finetune.pt', map_location=torch.device('cpu')))
     embeddings_list = []
     for i in tqdm.tqdm(range(len(train_list))):
         img = PIL.Image.open(train_list[i])
@@ -46,13 +46,13 @@ def make_embeddings_list():
 #embeddings_list to file
 def save_embeddings_list():
     import pickle
-    with open('./embeddings_list.pkl', 'wb') as f:
+    with open('../embeddings_list.pkl', 'wb') as f:
         pickle.dump(embeddings_list, f)
 
 #labels to file
 def save_labels():
     import pickle
-    with open('./labels.pkl', 'wb') as f:
+    with open('../labels.pkl', 'wb') as f:
         pickle.dump(labels, f)
 
 
