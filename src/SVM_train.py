@@ -27,7 +27,7 @@ def split_train_test():
 #train model SVM
 def train_model():
     from sklearn.svm import SVC
-    clf = SVC(kernel='linear', probability=True)
+    clf = SVC(kernel='rbf', probability=True)
     clf.fit(X_train, y_train)
     return clf
 
@@ -52,8 +52,8 @@ X_train, X_test, y_train, y_test = split_train_test()
 
 X_train = torch.stack(X_train, dim=0)
 X_test = torch.stack(X_test, dim=0)
-X_train = X_train.reshape(X_train.shape[0], 25)
-X_test = X_test.reshape(X_test.shape[0], 25)
+X_train = X_train.reshape(X_train.shape[0], 512)
+X_test = X_test.reshape(X_test.shape[0], 512)
 X_train = X_train.detach().numpy()
 X_test = X_test.detach().numpy()
 y_train = np.array(y_train)

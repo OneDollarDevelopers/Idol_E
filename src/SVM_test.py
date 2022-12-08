@@ -48,8 +48,7 @@ def detect_face(path):
 def predict(path):
     transform = T.ToPILImage()
     mtcnn = MTCNN(image_size=160, margin=20, min_face_size=20, keep_all=True) #keep_all=True
-    resnet = InceptionResnetV1(classify = True, pretrained='vggface2',num_classes=25).eval()
-    resnet.load_state_dict(torch.load('../resnetmodel.pt', map_location=torch.device('cpu')))
+    resnet = InceptionResnetV1(pretrained='vggface2').eval()
     clf = load_model()
     img = PIL.Image.open(path)
     img_cropped = mtcnn(img, save_path=None)
@@ -72,7 +71,7 @@ def predict(path):
 
 
 #predict_multiple()
-prediction = predict('../test_embed/article4.jpeg')
+prediction = predict('../test_embed/article.jpg')
 detect_face('../test_embed/article.jpg')
 #print(prediction)
 print('Done')

@@ -28,8 +28,7 @@ def load_data():
 #make embeddings list from train forder
 def make_embeddings_list():
     mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
-    resnet = InceptionResnetV1(classify = True, pretrained='vggface2',num_classes=25).eval()
-    resnet.load_state_dict(torch.load('../resnetmodel.pt', map_location=torch.device('cpu')))
+    resnet = InceptionResnetV1( pretrained='vggface2').eval()
     embeddings_list = []
     for i in tqdm.tqdm(range(len(train_list))):
         img = PIL.Image.open(train_list[i])
