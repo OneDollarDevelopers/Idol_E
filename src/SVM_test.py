@@ -6,6 +6,7 @@ import re
 import numpy as np
 import torchvision.transforms as T
 import matplotlib.pyplot as plt
+import torch
 #is_hidden function
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
@@ -13,7 +14,7 @@ def is_hidden(path):
 
 def load_model():
     import pickle
-    with open('./model.pkl', 'rb') as f:
+    with open('../model.pkl', 'rb') as f:
         clf = pickle.load(f)
     return clf
 
@@ -23,9 +24,9 @@ def predict_multiple():
     from PIL import Image
     import numpy as np
     test_list = []
-    for i in os.listdir('./test'):
+    for i in os.listdir('../test'):
         if not is_hidden(i):
-            test_list.append('./test/'+i)
+            test_list.append('../test/'+i)
     for i in test_list:
         predict(i)
 
@@ -47,7 +48,8 @@ def detect_face(path):
 def predict(path):
     transform = T.ToPILImage()
     mtcnn = MTCNN(image_size=160, margin=20, min_face_size=20, keep_all=True) #keep_all=True
-    resnet = InceptionResnetV1(pretrained='vggface2').eval()
+    resnet = InceptionResnetV1(classify = True, pretrained='vggface2',num_classes=25).eval()
+    resnet.load_state_dict(torch.load('../resnetmodel.pt', map_location=torch.device('cpu')))
     clf = load_model()
     img = PIL.Image.open(path)
     img_cropped = mtcnn(img, save_path=None)
@@ -60,16 +62,17 @@ def predict(path):
         img_embedding = resnet(img_cropped[i].unsqueeze(0))
         img_embedding = img_embedding.detach().numpy()
         print(np.amax(clf.predict_proba(img_embedding)))
-        if (np.amax(clf.predict_proba(img_embedding)) > 0.7).astype(bool):
+        if (np.amax(clf.predict_proba(img_embedding)) > 0.4).astype(bool):
             y_pred.append(clf.predict(img_embedding))
             print(y_pred[i])
         else:
-            y_pred.append( 'unknown')
+            y_pred.append( ['unknown'])
+            print(y_pred[i])
     return y_pred
 
 
 #predict_multiple()
-prediction = predict('./test_embed/article4.jpeg')
-detect_face('test_embed/article.jpg')
+prediction = predict('../test_embed/article4.jpeg')
+detect_face('../test_embed/article.jpg')
 #print(prediction)
 print('Done')

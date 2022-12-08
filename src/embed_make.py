@@ -8,7 +8,7 @@ import gc
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = '../train_cropped/'
+train_path = '../train/'
 #load image data from train folder with labels
 def load_data():
     import os
@@ -29,7 +29,7 @@ def load_data():
 def make_embeddings_list():
     mtcnn = MTCNN(image_size=160, margin=0, min_face_size=20) #keep_all=True
     resnet = InceptionResnetV1(classify = True, pretrained='vggface2',num_classes=25).eval()
-    resnet.load_state_dict(torch.load('../resnetmodel_finetune.pt', map_location=torch.device('cpu')))
+    resnet.load_state_dict(torch.load('../resnetmodel.pt', map_location=torch.device('cpu')))
     embeddings_list = []
     for i in tqdm.tqdm(range(len(train_list))):
         img = PIL.Image.open(train_list[i])

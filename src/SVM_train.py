@@ -40,7 +40,7 @@ def test_model():
 #save model
 def save_model():
     import pickle
-    with open('../model_resnetPretrain.pkl', 'wb') as f:
+    with open('../model.pkl', 'wb') as f:
         print("done")
         pickle.dump(clf, f)
 
