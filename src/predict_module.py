@@ -37,7 +37,7 @@ def predict(image, groupname):
             continue
         img_embedding = resnet(img_cropped[i].unsqueeze(0))
         img_embedding = img_embedding.detach().numpy()
-       # print(np.amax(clf.predict_proba(img_embedding)))
+        #print(np.amax(clf.predict_proba(img_embedding)))
         if (np.amax(clf.predict_proba(img_embedding)) > 0.8).astype(bool):
             y_pred.append(clf.predict(img_embedding))
             #print(y_pred[i])
