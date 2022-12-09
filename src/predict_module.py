@@ -11,19 +11,20 @@ def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
 
-def load_model():
+def load_model(groupname):
     import pickle
-    with open('../model.pkl', 'rb') as f:
+    with open('../'+groupname+'_model.pkl', 'rb') as f:
         clf = pickle.load(f)
     return clf
 
 
 
-def predict(image):
+def predict(image, groupname):
     transform = T.ToPILImage()
+    GN = groupname
     mtcnn = MTCNN(image_size=160, margin=20, min_face_size=20, keep_all=True) #keep_all=True
     resnet = InceptionResnetV1(pretrained='vggface2').eval()
-    clf = load_model()
+    clf = load_model(GN)
     img_cropped = mtcnn(image, save_path=None)
     if type(img_cropped) == type(None):
         return None, None

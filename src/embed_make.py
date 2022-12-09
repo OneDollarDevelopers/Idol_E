@@ -8,7 +8,7 @@ import gc
 def is_hidden(path):
     return bool(re.search(r'^\.', path))
 
-train_path = '../train/'
+train_path = '../train_Blackpink/'
 #load image data from train folder with labels
 def load_data():
     import os
@@ -45,13 +45,13 @@ def make_embeddings_list():
 #embeddings_list to file
 def save_embeddings_list():
     import pickle
-    with open('../embeddings_list.pkl', 'wb') as f:
+    with open('../Blackpink_embeddings_list.pkl', 'wb') as f:
         pickle.dump(embeddings_list, f)
 
 #labels to file
 def save_labels():
     import pickle
-    with open('../labels.pkl', 'wb') as f:
+    with open('../Blackpink_labels.pkl', 'wb') as f:
         pickle.dump(labels, f)
 
 
