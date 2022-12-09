@@ -1,12 +1,8 @@
-import face_recognition
-import cv2
 from moviepy.editor import *
-
 import predict_module as M
 
-input_movie = cv2.VideoCapture("../test_video/example5.mp4")
-parent_clip = VideoFileClip('../test_video/example5.mp4', audio=True)
-length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+parent_clip = VideoFileClip('../test_video/example1.mp4', audio=True)
+
 
 print("please input name:")
 favorite_name = input()
@@ -20,48 +16,34 @@ audioclip=[]
 frame_number = 0
 start_time = 0
 finish_time = 0
-second = round(input_movie.get(cv2.CAP_PROP_FPS))
+
+print(parent_clip.duration)
 flag= False
 while True:
     # Grab a single frame of video
-    ret, frame = input_movie.read()
-    frame_number += 1
-    #print(int(input_movie.get(1)))
-    if not ret:
+    if start_time >= round(parent_clip.duration):
         print("break")
         break
-    rgb_frame = frame[:, :, ::-1]
-    face_names, face_encodings = M.predict(frame)
+    frame = parent_clip.get_frame(start_time)
+    #print(frame)
+    face_names, face_encodings = M.predict(frame, groupname='Loona')
     if face_names == None:
-        #print('no face')
+        start_time += 0.5
         continue
-    if favorite_name in face_names:
-        flag=True
-        print("Nice!")
-        frame_number += int(input_movie.get(1))%second
-        input_movie.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
-        print(frame_number, int(input_movie.get(1)))
 
-    if int(input_movie.get(1))%second == 0:
-        #print(int(input_movie.get(1)), frame_number)
-        print('Hello?')
-        start_time += 1
-        finish_time = start_time + 1
-        if flag:
-            videoclip.append(
-                parent_clip.subclip(start_time, finish_time)
-            )
-            print('Nice!')
-            flag = False 
-        else:
-            continue
+    if favorite_name in face_names:
+        print(start_time)
+        videoclip.append(
+            parent_clip.subclip(start_time, start_time + 0.5)
+        )
+    start_time += 0.5
+
 
 # All done!
 final_clip = concatenate_videoclips(videoclip)
-final_clip.write_videofile("../test_video/moviepy8.mp4",  codec='libx264', 
+final_clip.write_videofile("../test_video/moviepy1.mp4",  codec='libx264', 
                      audio_codec='aac', 
                      temp_audiofile='temp-audio.m4a', 
                      remove_temp=True)
 
-input_movie.release()
-cv2.destroyAllWindows()
+
