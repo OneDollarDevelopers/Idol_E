@@ -2,7 +2,6 @@ from moviepy.editor import *
 import predict_module as M
 
 def find_clip(video, groupname, favorite_name):
-    print('Hello!')
     parent_clip = VideoFileClip(video, audio=True)
     face_locations = []
     face_encodings = []
