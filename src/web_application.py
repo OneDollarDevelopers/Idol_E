@@ -21,7 +21,6 @@ def videocheck():
         input_video.save('../test_video/' + secure_filename(input_video.filename))
         path = Path('../test_video/' + secure_filename(input_video.filename))
         path.rename('../test_video/input.mp4')
-        print('Hello1!!')
         files = os.listdir('../test_video')
         return render_template('videocheck.html')
 @app.route('/result', methods=['POST', 'GET'])

@@ -18,7 +18,7 @@ def find_clip(video, groupname, favorite_name):
             break
         frame = parent_clip.get_frame(start_time)
         #print(frame)
-        face_names, face_encodings = M.predict(frame, groupname='LE')
+        face_names, face_encodings = M.predict(frame, groupname)
         if face_names == None:
             start_time += 0.5
             continue
