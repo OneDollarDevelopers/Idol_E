@@ -20,7 +20,8 @@ we recomend to install below packages
 
 ### 사용 시 주의할점
 
-현재 저희는 스테이씨, 르세라핌, 이달의 소녀, 블랙핑크 4개의 걸그룹에 대한 영상 추출을 제공하고 있습니다.
+현재 저희는 스테이씨, 르세라핌, 이달의 소녀 총 3개의 걸그룹에 대한 영상 추출을 제공하고 있습니다.
+블랙핑크는 데이터셋 오류 문제로 모델을 제작하지 못하여, 아쉽게 추출을 제공하지 못하는 점 양해 부탁드립니다.
 개발상 편의와 사용상 편의를 위해 각 그룹 이름을 영어로 변경하여 입력해야하는 점 양해 부탁드립니다.
 아래에 적힌 것은 그룹 이름에서 각 그룹과 멤버 이름을 어떻게 입력해야하는지 정리해 두었습니다.
 
@@ -29,7 +30,6 @@ we recomend to install below packages
 스테이씨 : StayC
 르세라핌 : LE
 이달의소녀 : Loona
-블랙핑크 : Blackpink
 
 **스테이씨**
 아이사 : isa
@@ -58,9 +58,5 @@ we recomend to install below packages
 여진 : yeojin
 이브 : yves
 
-**블랙핑크**
-제니 : jennie
-지수 : jisoo
-리사 : lisa
-로제 : rose
+
 
